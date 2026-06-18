@@ -11,7 +11,7 @@ Single-file TOEIC Listening & Reading practice web app designed for iPad, phones
 - Web Speech API playback for Listening with transcript fallback.
 - Local progress saved in the browser with `localStorage`.
 - Responsive iPad-first layout with large touch targets.
-- Part 1 supports real raster scene images in `assets/part1/*.webp`, with built-in SVG fallback when an asset is missing.
+- Part 1 supports real raster scene images in `assets/part1/*.png`, with built-in SVG fallback when an asset is missing.
 
 ## Browser Notes
 
@@ -34,13 +34,15 @@ This is original practice material inspired by the TOEIC Listening & Reading for
 
 For richer Part 1 visuals, add imagegen or other owned/licensed assets with these filenames:
 
-- `assets/part1/conference-room.webp`
-- `assets/part1/warehouse.webp`
-- `assets/part1/hotel-lobby.webp`
-- `assets/part1/train-station.webp`
-- `assets/part1/office-kitchen.webp`
-- `assets/part1/copy-center.webp`
-- `assets/part1/airport-gate.webp`
-- `assets/part1/retail-store.webp`
+- `assets/part1/conference-room.png`
+- `assets/part1/warehouse.png`
+- `assets/part1/hotel-lobby.png`
+- `assets/part1/train-station.png`
+- `assets/part1/office-kitchen.png`
+- `assets/part1/copy-center.png`
+- `assets/part1/airport-gate.png`
+- `assets/part1/retail-store.png`
 
 If any file is missing, the app automatically shows its local SVG fallback instead of a broken image.
+
+Run `powershell -ExecutionPolicy Bypass -File tools/create-part1-assets.ps1` to regenerate the bundled PNG scene assets.

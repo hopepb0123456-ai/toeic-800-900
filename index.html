@@ -653,7 +653,7 @@
           id: `P1-${id++}`, part: 1, difficulty: i < 20 ? "Core" : i < 45 ? "Target 800" : "Target 900",
           prompt: "Choose the statement that best describes the scene.",
           visualDescription: `Scene: ${place}. Main detail: a ${person} is ${action}.`,
-          scene: { place, person, action, image: `assets/part1/${place.replaceAll(" ", "-")}.webp` },
+          scene: { place, person, action, image: `assets/part1/${place.replaceAll(" ", "-")}.png` },
           script: c.choices.join(". "),
           choices: c.choices, answer: c.answer,
           explanation: `The key visual clue is the ${person} actively ${action} in the ${place}.`,
