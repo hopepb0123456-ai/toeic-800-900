@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f3ea">
+  <title>TOEIC 800-900 Coach</title>
+  <style>
+    :root {
+      --paper: #f7f3ea;
+      --surface: #fffdf8;
+      --surface-2: #f0f7f4;
+      --ink: #20242a;
+      --muted: #66706f;
+      --line: #ded8cd;
+      --brand: #0e766e;
+      --brand-2: #b85c38;
+      --gold: #c9922b;
+      --danger: #b33a3a;
+      --ok: #237d52;
+      --shadow: 0 12px 34px rgba(32, 36, 42, .09);
+      --radius: 8px;
+      --tap: 48px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--paper); color: var(--ink); }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-size: 17px;
+      line-height: 1.55;
+      letter-spacing: 0;
+      background:
+        linear-gradient(180deg, rgba(14, 118, 110, .08), transparent 280px),
+        var(--paper);
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    button {
+      min-height: var(--tap);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:disabled { cursor: not-allowed; opacity: .55; }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+      padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      gap: 16px;
+    }
+
+    .side {
+      position: sticky;
+      top: 16px;
+      align-self: start;
+      height: calc(100vh - 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, .88);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .mark {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--brand);
+      color: white;
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.15;
+    }
+
+    .brand p { margin: 2px 0 0; color: var(--muted); font-size: .86rem; }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    .nav button.active {
+      border-color: rgba(14, 118, 110, .45);
+      background: #e6f4ef;
+      color: #064f4a;
+      font-weight: 750;
+    }
+
+    .mini-stats {
+      margin-top: auto;
+      display: grid;
+      gap: 10px;
+      font-size: .92rem;
+      color: var(--muted);
+    }
+
+    .stat-pill {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    main {
+      min-width: 0;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+      padding-bottom: 84px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, .9);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar h2 { margin: 0; font-size: clamp(1.25rem, 2vw, 1.8rem); }
+    .topbar p { margin: 2px 0 0; color: var(--muted); font-size: .95rem; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .primary {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: white;
+      font-weight: 750;
+    }
+
+    .accent {
+      border-color: rgba(184, 92, 56, .45);
+      background: #fff0e9;
+      color: #7d3218;
+      font-weight: 700;
+    }
+
+    .ghost { background: transparent; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .span-12 { grid-column: span 12; }
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+    .span-3 { grid-column: span 3; }
+
+    .panel h3 {
+      margin: 0 0 10px;
+      font-size: 1.06rem;
+    }
+
+    .panel p { margin: 0 0 12px; color: var(--muted); }
+
+    .metric {
+      display: grid;
+      gap: 4px;
+    }
+
+    .metric strong {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .progress {
+      width: 100%;
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e7e0d5;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand), var(--gold));
+      border-radius: inherit;
+      transition: width .25s ease;
+    }
+
+    .week-list, .part-list, .bank-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .week-item, .part-item, .mistake-item, .bank-item {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+    }
+
+    .week-head, .part-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #e8ece8;
+      color: #46504f;
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .quiz-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .question-card {
+      min-height: 420px;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .question-text {
+      font-size: 1.12rem;
+      color: var(--ink);
+      white-space: pre-wrap;
+    }
+
+    .visual-box, .passage-box, .script-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-2);
+      padding: 14px;
+      color: #233a36;
+    }
+
+    .passage-box {
+      max-height: 380px;
+      overflow: auto;
+      background: #fbfaf6;
+      line-height: 1.7;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      align-items: center;
+      gap: 10px;
+      min-height: 54px;
+      width: 100%;
+      padding: 9px 12px;
+      text-align: left;
+    }
+
+    .choice .letter {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #ece5d9;
+      font-weight: 800;
+    }
+
+    .choice.selected {
+      border-color: var(--brand);
+      background: #e6f4ef;
+    }
+
+    .choice.correct {
+      border-color: var(--ok);
+      background: #e4f5ec;
+    }
+
+    .choice.wrong {
+      border-color: var(--danger);
+      background: #fae8e8;
+    }
+
+    .explanation {
+      display: none;
+      padding: 14px;
+      border-left: 4px solid var(--brand);
+      border-radius: var(--radius);
+      background: #f1faf6;
+    }
+
+    .explanation.show { display: block; }
+
+    .quiz-side {
+      position: sticky;
+      top: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .timer {
+      font-size: 2rem;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    .question-jump {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .jump {
+      min-height: 44px;
+      padding: 0;
+      font-size: .85rem;
+    }
+
+    .jump.answered { background: #e6f4ef; border-color: rgba(14, 118, 110, .45); }
+    .jump.current { outline: 3px solid rgba(14, 118, 110, .18); font-weight: 800; }
+    .jump.flagged { color: #7d3218; border-color: rgba(184, 92, 56, .55); }
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      display: none;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      padding: 8px max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+      border-top: 1px solid var(--line);
+      background: rgba(255, 253, 248, .96);
+      backdrop-filter: blur(14px);
+    }
+
+    .bottom-nav button {
+      min-height: 54px;
+      padding: 6px 4px;
+      border: 0;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      gap: 1px;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+
+    .bottom-nav button strong { font-size: 1.05rem; line-height: 1; }
+    .bottom-nav button.active { color: var(--brand); font-weight: 800; }
+
+    .hidden { display: none !important; }
+
+    select, input[type="number"] {
+      min-height: var(--tap);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 8px 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      resize: vertical;
+      background: #fffaf1;
+    }
+
+    @media (max-width: 1100px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+        padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      }
+
+      .side { display: none; }
+      .bottom-nav { display: grid; }
+      .quiz-layout { grid-template-columns: 1fr; }
+      .quiz-side { position: static; }
+      .span-8, .span-6, .span-4, .span-3 { grid-column: span 12; }
+    }
+
+    @media (orientation: landscape) and (min-width: 900px) and (max-width: 1180px) {
+      .side { display: flex; }
+      .bottom-nav { display: none; }
+      .app-shell { grid-template-columns: 250px minmax(0, 1fr); }
+      .quiz-layout { grid-template-columns: minmax(0, 1fr) 300px; }
+    }
+
+    @media (max-width: 560px) {
+      body { font-size: 16px; }
+      .topbar { align-items: stretch; flex-direction: column; }
+      .toolbar { display: grid; grid-template-columns: 1fr 1fr; }
+      .toolbar button, .toolbar select { width: 100%; }
+      .question-meta, .week-head, .part-head { flex-direction: column; align-items: stretch; }
+      .question-text { font-size: 1.05rem; }
+      .panel { padding: 14px; }
+      .grid { gap: 12px; }
+      .bottom-nav { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="side">
+      <div class="brand">
+        <div class="mark">990</div>
+        <div>
+          <h1>TOEIC 800-900 Coach</h1>
+          <p>Listening & Reading</p>
+        </div>
+      </div>
+      <nav class="nav" id="sideNav"></nav>
+      <div class="mini-stats">
+        <div class="stat-pill"><span>Readiness</span><strong id="miniBand">Fresh</strong></div>
+        <div class="stat-pill"><span>Answered</span><strong id="miniAnswered">0</strong></div>
+        <div class="stat-pill"><span>Bank</span><strong id="miniBank">420</strong></div>
+      </div>
+    </aside>
+
+    <main>
+      <section class="topbar">
+        <div>
+          <h2 id="viewTitle">Dashboard</h2>
+          <p id="viewSubtitle">Your iPad-friendly TOEIC L&R training desk.</p>
+        </div>
+        <div class="toolbar" id="topActions"></div>
+      </section>
+
+      <section id="viewRoot"></section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav"></nav>
+
+  <script>
+    const STORAGE_KEY = "toeic800900_progress_v1";
+    const LETTERS = ["A", "B", "C", "D"];
+    const PARTS = {
+      1: { name: "Photographs", section: "Listening", icon: "□", minutes: 6 },
+      2: { name: "Question-Response", section: "Listening", icon: "?", minutes: 10 },
+      3: { name: "Conversations", section: "Listening", icon: "◐", minutes: 15 },
+      4: { name: "Talks", section: "Listening", icon: "◉", minutes: 15 },
+      5: { name: "Incomplete Sentences", section: "Reading", icon: "Aa", minutes: 12 },
+      6: { name: "Text Completion", section: "Reading", icon: "¶", minutes: 14 },
+      7: { name: "Reading Comprehension", section: "Reading", icon: "▤", minutes: 24 }
+    };
+
+    const NAV = [
+      ["dashboard", "⌂", "Dashboard"],
+      ["course", "▦", "8 Weeks"],
+      ["practice", "◎", "Practice"],
+      ["mock", "⏱", "Mock"],
+      ["review", "↺", "Review"],
+      ["bank", "Aa", "Bank"]
+    ];
+
+    const WEEKS = [
+      { week: 1, title: "Diagnostic + TOEIC Map", focus: "Understand format, pacing, score target, and your first weak parts.", parts: [1,2,5], drills: 40 },
+      { week: 2, title: "Part 1-2 Precision", focus: "Photo verbs, prepositions, WH questions, distractor traps.", parts: [1,2], drills: 60 },
+      { week: 3, title: "Part 3 Conversations", focus: "Read questions first, follow speaker intent, infer next action.", parts: [3], drills: 60 },
+      { week: 4, title: "Part 4 Talks", focus: "Announcements, messages, schedules, purpose and detail.", parts: [4], drills: 60 },
+      { week: 5, title: "Part 5 Grammar Core", focus: "Word forms, agreement, tense, voice, connectors, modifiers.", parts: [5], drills: 70 },
+      { week: 6, title: "Part 6 Text Completion", focus: "Context, sentence insertion, cohesive devices, business messages.", parts: [6], drills: 55 },
+      { week: 7, title: "Part 7 Reading Speed", focus: "Scanning, paraphrase, double/triple passage linking.", parts: [7], drills: 55 },
+      { week: 8, title: "Mixed Review + Mock", focus: "Timed sets, error log, target 800-900 readiness check.", parts: [1,2,3,4,5,6,7], drills: 80 }
+    ];
+
+    const VOCAB = [
+      ["invoice", "ใบแจ้งหนี้", "The invoice is due by Friday."],
+      ["shipment", "การจัดส่ง", "The shipment was delayed by heavy rain."],
+      ["itinerary", "กำหนดการเดินทาง", "Please review the itinerary before the trip."],
+      ["renovation", "การปรับปรุง", "The lobby renovation will begin next week."],
+      ["reimburse", "ชดใช้เงินคืน", "Employees may request reimbursement online."],
+      ["complimentary", "ฟรี", "Guests receive a complimentary breakfast."],
+      ["postpone", "เลื่อนออกไป", "The meeting has been postponed until Monday."],
+      ["venue", "สถานที่จัดงาน", "The venue can seat 300 people."],
+      ["inventory", "สินค้าคงคลัง", "The store updates its inventory every evening."],
+      ["mandatory", "จำเป็น/บังคับ", "Safety training is mandatory for all staff."],
+      ["proposal", "ข้อเสนอ", "The proposal includes a budget estimate."],
+      ["warranty", "การรับประกัน", "The printer comes with a two-year warranty."]
+    ];
+
+    const GRAMMAR = [
+      ["Word form", "Look before and after the blank. Adjectives modify nouns; adverbs modify verbs/adjectives."],
+      ["Subject-verb agreement", "Ignore prepositional phrases between subject and verb."],
+      ["Passive voice", "Use be + past participle when the subject receives the action."],
+      ["Connectors", "Although, because, therefore, and however signal logic more than vocabulary."],
+      ["Relative clauses", "Who for people, which for things, that for essential clauses."],
+      ["Tense clues", "Dates, already, since, by the time, and currently usually decide tense."]
+    ];
+
+    function shuffleCopy(items) {
+      const out = items.slice();
+      for (let i = out.length - 1; i > 0; i--) {
+        const j = Math.floor((i * 9301 + 49297) % 233280 % (i + 1));
+        [out[i], out[j]] = [out[j], out[i]];
+      }
+      return out;
+    }
+
+    function makeChoices(correct, distractors) {
+      const pool = [correct, ...distractors.filter(x => x !== correct)].slice(0, 4);
+      while (pool.length < 4) pool.push("Not enough information");
+      const choices = shuffleCopy(pool);
+      return { choices, answer: choices.indexOf(correct) };
+    }
+
+    function generateQuestions() {
+      const questions = [];
+      const people = ["manager", "technician", "receptionist", "sales representative", "accountant", "visitor", "chef", "designer"];
+      const places = ["conference room", "warehouse", "hotel lobby", "train station", "office kitchen", "copy center", "airport gate", "retail store"];
+      const actions = ["reviewing a document", "setting up chairs", "checking a schedule", "repairing equipment", "packing boxes", "greeting a client", "arranging products", "using a laptop"];
+      const topics = ["budget report", "client meeting", "delivery schedule", "training session", "office relocation", "product launch", "hotel reservation", "maintenance request"];
+      const names = ["Mina", "Daniel", "Arun", "Grace", "Ken", "Sofia", "Niran", "Olivia"];
+      const companies = ["Northstar Foods", "Brighton Media", "Metro Logistics", "Aster Hotels", "Peak Office Supply", "Harbor Tech", "Union Travel", "Greenleaf Design"];
+      const verbs = ["review", "submit", "confirm", "replace", "announce", "prepare", "inspect", "reserve"];
+      const nouns = ["proposal", "invoice", "contract", "equipment", "brochure", "schedule", "shipment", "application"];
+      const connectors = [
+        ["Although", "Although the flight was delayed, the team arrived before noon.", ["Because", "During", "Despite"]],
+        ["because", "The order was canceled because the item was out of stock.", ["unless", "therefore", "however"]],
+        ["therefore", "The venue is fully booked; therefore, we need a new location.", ["although", "while", "before"]],
+        ["unless", "The discount will not apply unless you register today.", ["so", "despite", "because of"]]
+      ];
+
+      let id = 1;
+      for (let i = 0; i < 60; i++) {
+        const place = places[i % places.length];
+        const action = actions[(i + 2) % actions.length];
+        const person = people[(i + 4) % people.length];
+        const correct = `A ${person} is ${action} in the ${place}.`;
+        const c = makeChoices(correct, [
+          `The ${place} is closed for the day.`,
+          `Several passengers are boarding a bus.`,
+          `The tables have been removed from the room.`
+        ]);
+        questions.push({
+          id: `P1-${id++}`, part: 1, difficulty: i < 20 ? "Core" : i < 45 ? "Target 800" : "Target 900",
+          prompt: "Choose the statement that best describes the scene.",
+          visualDescription: `Scene: ${place}. Main detail: a ${person} is ${action}.`,
+          script: c.choices.join(". "),
+          choices: c.choices, answer: c.answer,
+          explanation: `The key visual clue is the ${person} actively ${action} in the ${place}.`,
+          tags: ["photo", action.split(" ")[0], place]
+        });
+      }
+
+      const p2Patterns = [
+        ["When will the budget report be ready?", "By Thursday afternoon.", ["In the accounting department.", "It was very detailed."]],
+        ["Who approved the travel request?", "Ms. Chen did.", ["For three nights.", "At the airport counter."]],
+        ["Where should I place these boxes?", "Beside the loading dock.", ["They were delivered yesterday.", "About twenty dollars."]],
+        ["Why was the meeting postponed?", "The director is visiting a client.", ["At nine thirty.", "Yes, I can reserve it."]],
+        ["Could you print the agenda?", "Sure, I will do it now.", ["It lasts two hours.", "The printer was on sale."]],
+        ["How many copies do we need?", "About thirty should be enough.", ["At the copy center.", "Because the file is large."]]
+      ];
+      for (let i = 0; i < 60; i++) {
+        const item = p2Patterns[i % p2Patterns.length];
+        const c = makeChoices(item[1], [...item[2], "No, I have not seen the brochure."]);
+        questions.push({
+          id: `P2-${id++}`, part: 2, difficulty: i < 22 ? "Core" : i < 46 ? "Target 800" : "Target 900",
+          prompt: "Listen to the question and choose the best response.",
+          script: item[0],
+          choices: c.choices, answer: c.answer,
+          explanation: `The response must answer the question type directly. "${item[1]}" is the only natural reply.`,
+          tags: ["question-response", item[0].split(" ")[0].toLowerCase()]
+        });
+      }
+
+      for (let i = 0; i < 60; i++) {
+        const topic = topics[i % topics.length];
+        const name = names[i % names.length];
+        const company = companies[(i + 3) % companies.length];
+        const script = `${name}: Did you see the updated ${topic} from ${company}?\nCoworker: Yes. The deadline moved to next Tuesday, and the manager wants the final numbers by noon.\n${name}: Good. I will revise the summary and send it before lunch.`;
+        const correct = "The deadline was moved to next Tuesday.";
+        const c = makeChoices(correct, [
+          "The company canceled the project.",
+          "The manager left for a vacation.",
+          "The report was already sent last month."
+        ]);
+        questions.push({
+          id: `P3-${id++}`, part: 3, difficulty: i < 18 ? "Core" : i < 44 ? "Target 800" : "Target 900",
+          prompt: `What does the coworker say about the ${topic}?`,
+          script, choices: c.choices, answer: c.answer,
+          explanation: "The coworker says the deadline moved to next Tuesday, which is a paraphrase of the correct answer.",
+          tags: ["conversation", topic]
+        });
+      }
+
+      for (let i = 0; i < 60; i++) {
+        const company = companies[i % companies.length];
+        const topic = topics[(i + 1) % topics.length];
+        const day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][i % 5];
+        const script = `This is a reminder for all employees at ${company}. The ${topic} will take place on ${day} at 10 A.M. in Conference Room B. Please bring your employee ID and arrive ten minutes early so the session can begin on time.`;
+        const correct = "Bring an employee ID.";
+        const c = makeChoices(correct, [
+          "Call a travel agent.",
+          "Submit a lunch order.",
+          "Move the furniture after work."
+        ]);
+        questions.push({
+          id: `P4-${id++}`, part: 4, difficulty: i < 18 ? "Core" : i < 44 ? "Target 800" : "Target 900",
+          prompt: "What are listeners asked to do?",
+          script, choices: c.choices, answer: c.answer,
+          explanation: "The announcement asks employees to bring an employee ID and arrive early.",
+          tags: ["talk", topic, day]
+        });
+      }
+
+      const wordForms = [
+        ["considerable", "The new branch reported a _____ increase in online orders.", ["considerable", "considerably", "consider", "consideration"], 0, "An adjective is needed before the noun 'increase'."],
+        ["efficiently", "The technician repaired the machine _____ before the afternoon shift.", ["efficient", "efficiency", "efficiently", "efficient"], 2, "An adverb modifies the verb 'repaired'."],
+        ["approval", "Final _____ from the director is required before publication.", ["approve", "approved", "approval", "approving"], 2, "A noun is needed after the adjective 'Final'."],
+        ["available", "The updated catalog will be _____ on the company website tomorrow.", ["availability", "available", "availably", "avail"], 1, "An adjective is needed after 'be'."]
+      ];
+      for (let i = 0; i < 60; i++) {
+        const base = wordForms[i % wordForms.length];
+        questions.push({
+          id: `P5-${id++}`, part: 5, difficulty: i < 20 ? "Core" : i < 45 ? "Target 800" : "Target 900",
+          prompt: base[1], choices: base[2], answer: base[3],
+          explanation: base[4],
+          tags: ["grammar", "word-form"]
+        });
+      }
+      for (let i = 0; i < 20; i++) {
+        const con = connectors[i % connectors.length];
+        const c = makeChoices(con[0], con[2]);
+        questions.push({
+          id: `P5-${id++}`, part: 5, difficulty: i < 8 ? "Target 800" : "Target 900",
+          prompt: con[1].replace(con[0], "_____"),
+          choices: c.choices, answer: c.answer,
+          explanation: `The sentence logic requires "${con[0]}".`,
+          tags: ["grammar", "connector"]
+        });
+      }
+
+      for (let i = 0; i < 60; i++) {
+        const company = companies[i % companies.length];
+        const verb = verbs[i % verbs.length];
+        const noun = nouns[(i + 2) % nouns.length];
+        const correct = ["therefore", "however", "also", "before"][i % 4];
+        const passage = `To: All Staff\nSubject: Procedure Update\n\nStarting next month, ${company} will ${verb} every ${noun} through the internal portal. The change is intended to reduce processing time and improve record accuracy. _____, employees should check that their profile information is current before submitting new requests.`;
+        const c = makeChoices(correct, ["Although", "During", "Instead"]);
+        questions.push({
+          id: `P6-${id++}`, part: 6, difficulty: i < 18 ? "Core" : i < 44 ? "Target 800" : "Target 900",
+          prompt: "Choose the best word or phrase for the blank.",
+          passage, choices: c.choices, answer: c.answer,
+          explanation: `"${correct}" best connects the procedure change with the action employees should take.`,
+          tags: ["text-completion", noun]
+        });
+      }
+
+      for (let i = 0; i < 60; i++) {
+        const company = companies[i % companies.length];
+        const topic = topics[(i + 5) % topics.length];
+        const date = ["June 12", "July 8", "August 3", "September 19"][i % 4];
+        const passage = `Notice from ${company}\n\nCustomers are advised that our service desk will close at 3 P.M. on ${date} because staff members will attend a required training session. Online chat support will remain available until 6 P.M. Orders placed after 2 P.M. will be processed on the following business day.\n\nFor urgent questions about a ${topic}, please use the priority contact form on our website.`;
+        const correct = "Staff members will attend training.";
+        const c = makeChoices(correct, [
+          "The office is moving to a new address.",
+          "A holiday sale begins at 3 P.M.",
+          "Online chat support is unavailable all day."
+        ]);
+        questions.push({
+          id: `P7-${id++}`, part: 7, difficulty: i < 18 ? "Core" : i < 44 ? "Target 800" : "Target 900",
+          prompt: "Why will the service desk close early?",
+          passage, choices: c.choices, answer: c.answer,
+          explanation: "The notice states that staff members will attend a required training session.",
+          tags: ["reading", topic]
+        });
+      }
+
+      return questions.slice(0, 420);
+    }
+
+    const QUESTIONS = generateQuestions();
+    const defaultState = {
+      view: "dashboard",
+      completedWeeks: [],
+      attempts: [],
+      answers: {},
+      bookmarks: [],
+      speechRate: 0.92,
+      lastMode: null
+    };
+
+    let state = loadState();
+    let quiz = null;
+    let timerHandle = null;
+    let remainingSeconds = 0;
+
+    function loadState() {
+      try {
+        return { ...defaultState, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+      } catch {
+        return { ...defaultState };
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateChrome();
+    }
+
+    function byId(id) { return document.getElementById(id); }
+
+    function setView(view) {
+      state.view = view;
+      saveState();
+      stopSpeech();
+      stopTimer();
+      render();
+    }
+
+    function updateChrome() {
+      byId("miniBank").textContent = QUESTIONS.length;
+      const answered = Object.keys(state.answers || {}).length;
+      byId("miniAnswered").textContent = answered;
+      byId("miniBand").textContent = readinessBand().label;
+      for (const rootId of ["sideNav", "bottomNav"]) {
+        const root = byId(rootId);
+        if (!root) continue;
+        root.innerHTML = NAV.map(([key, icon, label]) => `
+          <button class="${state.view === key ? "active" : ""}" onclick="setView('${key}')" title="${label}">
+            <strong>${icon}</strong><span>${label}</span>
+          </button>`).join("");
+      }
+    }
+
+    function readinessBand() {
+      const attempts = state.attempts || [];
+      if (!attempts.length) return { label: "Fresh", score: 0 };
+      const latest = attempts[attempts.length - 1];
+      const score = latest.estimated || Math.round(latest.percent * 9.9);
+      if (score >= 900) return { label: "900+", score };
+      if (score >= 800) return { label: "800+", score };
+      if (score >= 700) return { label: "700+", score };
+      return { label: "<700", score };
+    }
+
+    function setHeader(title, subtitle, actions = "") {
+      byId("viewTitle").textContent = title;
+      byId("viewSubtitle").textContent = subtitle;
+      byId("topActions").innerHTML = actions;
+    }
+
+    function render() {
+      updateChrome();
+      const viewMap = {
+        dashboard: renderDashboard,
+        course: renderCourse,
+        practice: renderPractice,
+        mock: renderMock,
+        review: renderReview,
+        bank: renderBank
+      };
+      (viewMap[state.view] || renderDashboard)();
+    }
+
+    function percentDone() {
+      return Math.min(100, Math.round((Object.keys(state.answers || {}).length / QUESTIONS.length) * 100));
+    }
+
+    function accuracyFor(part) {
+      const entries = Object.values(state.answers || {}).filter(a => !part || a.part === part);
+      if (!entries.length) return 0;
+      return Math.round(entries.filter(a => a.correct).length / entries.length * 100);
+    }
+
+    function renderDashboard() {
+      const band = readinessBand();
+      setHeader("Dashboard", "Your iPad-friendly TOEIC L&R training desk.", `
+        <button class="primary" onclick="startQuickSet()">Start 20Q</button>
+        <button class="accent" onclick="setView('mock')">Mock Test</button>
+      `);
+      const done = percentDone();
+      byId("viewRoot").innerHTML = `
+        <div class="grid">
+          <article class="panel span-3 metric"><p>Readiness</p><strong>${band.label}</strong><span>${band.score ? band.score + " est." : "No score yet"}</span></article>
+          <article class="panel span-3 metric"><p>Answered</p><strong>${Object.keys(state.answers || {}).length}</strong><span>${QUESTIONS.length} questions</span></article>
+          <article class="panel span-3 metric"><p>Accuracy</p><strong>${accuracyFor() || 0}%</strong><span>all practice</span></article>
+          <article class="panel span-3 metric"><p>Weeks</p><strong>${state.completedWeeks.length}/8</strong><span>completed</span></article>
+          <article class="panel span-8">
+            <h3>Course Progress</h3>
+            <p>Work through weekly drills, then use Review to repeat your misses.</p>
+            <div class="progress"><div class="bar" style="width:${done}%"></div></div>
+            <div class="tag-row" style="margin-top:12px">${WEEKS.map(w => `<span class="tag">W${w.week} ${state.completedWeeks.includes(w.week) ? "done" : "open"}</span>`).join("")}</div>
+          </article>
+          <article class="panel span-4">
+            <h3>Weak Parts</h3>
+            ${weakPartList()}
+          </article>
+          <article class="panel span-12">
+            <h3>Today</h3>
+            <div class="part-list">
+              <div class="part-item">
+                <div class="part-head"><strong>Recommended drill</strong><span class="tag">20 questions</span></div>
+                <p>${recommendedDrillText()}</p>
+                <button class="primary" onclick="startQuickSet()">Start recommended set</button>
+              </div>
+            </div>
+          </article>
+        </div>`;
+    }
+
+    function weakPartList() {
+      const rows = Object.keys(PARTS).map(n => ({ part: Number(n), acc: accuracyFor(Number(n)) }));
+      rows.sort((a, b) => (a.acc || 101) - (b.acc || 101));
+      return `<div class="bank-list">${rows.slice(0, 3).map(r => `
+        <div class="bank-item"><strong>Part ${r.part}: ${PARTS[r.part].name}</strong><span>${r.acc || 0}% accuracy</span></div>
+      `).join("")}</div>`;
+    }
+
+    function recommendedDrillText() {
+      const weak = Object.keys(PARTS).map(Number).sort((a, b) => (accuracyFor(a) || 101) - (accuracyFor(b) || 101))[0] || 5;
+      return `Focus Part ${weak}: ${PARTS[weak].name}. Mix accuracy first, speed second.`;
+    }
+
+    function renderCourse() {
+      setHeader("8 Weeks", "A focused path from diagnostic to 800-900 readiness.", `<button class="primary" onclick="startWeek(${nextWeek()})">Continue</button>`);
+      byId("viewRoot").innerHTML = `<div class="week-list">${WEEKS.map(w => `
+        <article class="week-item">
+          <div class="week-head">
+            <div><strong>Week ${w.week}: ${w.title}</strong><p>${w.focus}</p></div>
+            <span class="tag">${state.completedWeeks.includes(w.week) ? "completed" : `${w.drills} drills`}</span>
+          </div>
+          <div class="tag-row">${w.parts.map(p => `<span class="tag">Part ${p} ${PARTS[p].name}</span>`).join("")}</div>
+          <div class="toolbar">
+            <button class="primary" onclick="startWeek(${w.week})">Practice Week ${w.week}</button>
+            <button onclick="toggleWeek(${w.week})">${state.completedWeeks.includes(w.week) ? "Mark Open" : "Mark Done"}</button>
+          </div>
+        </article>`).join("")}</div>`;
+    }
+
+    function nextWeek() {
+      return WEEKS.find(w => !state.completedWeeks.includes(w.week))?.week || 8;
+    }
+
+    function toggleWeek(week) {
+      state.completedWeeks = state.completedWeeks.includes(week)
+        ? state.completedWeeks.filter(w => w !== week)
+        : [...state.completedWeeks, week];
+      saveState();
+      renderCourse();
+    }
+
+    function renderPractice() {
+      setHeader("Practice", "Choose a TOEIC part and train with instant explanations.", "");
+      byId("viewRoot").innerHTML = `
+        <div class="grid">
+          ${Object.entries(PARTS).map(([part, info]) => `
+            <article class="panel span-4">
+              <h3>Part ${part}: ${info.name}</h3>
+              <p>${info.section} · ${countPart(part)} questions · ${accuracyFor(Number(part)) || 0}% accuracy</p>
+              <div class="toolbar">
+                <button class="primary" onclick="startPart(${part}, 20)">20Q</button>
+                <button onclick="startPart(${part}, 40)">40Q</button>
+              </div>
+            </article>`).join("")}
+        </div>`;
+    }
+
+    function renderMock() {
+      setHeader("Mock", "Timed TOEIC-style practice with estimated score bands.", "");
+      byId("viewRoot").innerHTML = `
+        <div class="grid">
+          <article class="panel span-6">
+            <h3>Mini Mock</h3>
+            <p>50 questions mixed from all seven parts. Good for iPad and phone practice sessions.</p>
+            <button class="primary" onclick="startMock('mini')">Start 50Q Mini Mock</button>
+          </article>
+          <article class="panel span-6">
+            <h3>Full-Length Simulation</h3>
+            <p>200 questions with TOEIC timing: 45 minutes Listening and 75 minutes Reading. Uses generated practice items.</p>
+            <button class="accent" onclick="startMock('full')">Start 200Q Mock</button>
+          </article>
+          <article class="panel span-12">
+            <h3>Latest Attempts</h3>
+            ${attemptTable()}
+          </article>
+        </div>`;
+    }
+
+    function attemptTable() {
+      if (!state.attempts.length) return `<p>No attempts yet.</p>`;
+      return `<div class="bank-list">${state.attempts.slice(-6).reverse().map(a => `
+        <div class="bank-item">
+          <strong>${a.mode} · ${a.correct}/${a.total} · ${a.percent}%</strong>
+          <span>Estimated TOEIC: ${a.estimated} · ${new Date(a.date).toLocaleString()}</span>
+        </div>`).join("")}</div>`;
+    }
+
+    function renderReview() {
+      const misses = Object.entries(state.answers || {}).filter(([, a]) => !a.correct).map(([id]) => QUESTIONS.find(q => q.id === id)).filter(Boolean);
+      setHeader("Review", "Repeat missed and bookmarked questions until the pattern feels boring.", `<button class="primary" onclick="startMistakes()">Practice Misses</button>`);
+      byId("viewRoot").innerHTML = `
+        <div class="grid">
+          <article class="panel span-6"><h3>Misses</h3><p>${misses.length} questions currently in your error log.</p><button class="primary" onclick="startMistakes()" ${misses.length ? "" : "disabled"}>Start Misses</button></article>
+          <article class="panel span-6"><h3>Bookmarks</h3><p>${state.bookmarks.length} saved questions.</p><button onclick="startBookmarks()" ${state.bookmarks.length ? "" : "disabled"}>Practice Bookmarks</button></article>
+          <article class="panel span-12"><h3>Error Log</h3><div class="bank-list">${misses.slice(0, 30).map(q => `<div class="mistake-item"><strong>${q.id} · Part ${q.part}</strong><span>${q.prompt}</span></div>`).join("") || "<p>No mistakes yet.</p>"}</div></article>
+        </div>`;
+    }
+
+    function renderBank() {
+      setHeader("Bank", "High-frequency TOEIC vocabulary and grammar reminders.", `<button onclick="exportProgress()">Export Progress</button>`);
+      byId("viewRoot").innerHTML = `
+        <div class="grid">
+          <article class="panel span-6">
+            <h3>Vocabulary</h3>
+            <div class="bank-list">${VOCAB.map(v => `<div class="bank-item"><strong>${v[0]} · ${v[1]}</strong><span>${v[2]}</span></div>`).join("")}</div>
+          </article>
+          <article class="panel span-6">
+            <h3>Grammar</h3>
+            <div class="bank-list">${GRAMMAR.map(g => `<div class="bank-item"><strong>${g[0]}</strong><span>${g[1]}</span></div>`).join("")}</div>
+          </article>
+        </div>`;
+    }
+
+    function countPart(part) {
+      return QUESTIONS.filter(q => q.part === Number(part)).length;
+    }
+
+    function startQuickSet() {
+      const weak = Object.keys(PARTS).map(Number).sort((a, b) => (accuracyFor(a) || 101) - (accuracyFor(b) || 101))[0] || 5;
+      startPart(weak, 20);
+    }
+
+    function pickQuestions(parts, count) {
+      const selectedParts = Array.isArray(parts) ? parts.map(Number) : [Number(parts)];
+      const pool = QUESTIONS.filter(q => selectedParts.includes(q.part));
+      const offset = Object.keys(state.answers || {}).length % Math.max(pool.length, 1);
+      const rotated = pool.slice(offset).concat(pool.slice(0, offset));
+      return rotated.slice(0, Math.min(count, rotated.length));
+    }
+
+    function startPart(part, count) {
+      startQuiz(`Part ${part} Practice`, pickQuestions(part, count), Math.max(8, Math.ceil(count * .55)));
+    }
+
+    function startWeek(week) {
+      const w = WEEKS.find(item => item.week === week) || WEEKS[0];
+      startQuiz(`Week ${week}: ${w.title}`, pickQuestions(w.parts, Math.min(w.drills, 40)), Math.max(12, Math.ceil(Math.min(w.drills, 40) * .6)));
+    }
+
+    function startMock(mode) {
+      if (mode === "full") {
+        const full = [1,2,3,4,5,6,7].flatMap(p => pickQuestions(p, p <= 4 ? 25 : 34)).slice(0, 200);
+        startQuiz("Full Mock", full, 120, true);
+      } else {
+        const mini = [1,2,3,4,5,6,7].flatMap(p => pickQuestions(p, p <= 4 ? 7 : 8)).slice(0, 50);
+        startQuiz("Mini Mock", mini, 35, true);
+      }
+    }
+
+    function startMistakes() {
+      const misses = Object.entries(state.answers || {}).filter(([, a]) => !a.correct).map(([id]) => QUESTIONS.find(q => q.id === id)).filter(Boolean);
+      if (misses.length) startQuiz("Review Misses", misses.slice(0, 50), Math.max(10, misses.length));
+    }
+
+    function startBookmarks() {
+      const items = state.bookmarks.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean);
+      if (items.length) startQuiz("Bookmarked Questions", items.slice(0, 50), Math.max(10, items.length));
+    }
+
+    function startQuiz(title, questions, minutes, isMock = false) {
+      quiz = {
+        title,
+        questions,
+        index: 0,
+        selected: {},
+        submitted: {},
+        flagged: {},
+        isMock,
+        startedAt: Date.now()
+      };
+      state.lastMode = title;
+      saveState();
+      remainingSeconds = minutes * 60;
+      setHeader(title, `${questions.length} questions · ${minutes} minutes`, "");
+      renderQuiz();
+      startTimer();
+    }
+
+    function renderQuiz() {
+      const q = quiz.questions[quiz.index];
+      const selected = quiz.selected[q.id];
+      const submitted = quiz.submitted[q.id];
+      byId("viewRoot").innerHTML = `
+        <div class="quiz-layout">
+          <article class="panel question-card">
+            <div class="question-meta">
+              <span>${q.id} · Part ${q.part}: ${PARTS[q.part].name} · ${q.difficulty}</span>
+              <span>${quiz.index + 1}/${quiz.questions.length}</span>
+            </div>
+            ${renderQuestionBody(q)}
+            <div class="choice-list">
+              ${q.choices.map((choice, i) => {
+                const cls = [
+                  "choice",
+                  selected === i ? "selected" : "",
+                  submitted && i === q.answer ? "correct" : "",
+                  submitted && selected === i && selected !== q.answer ? "wrong" : ""
+                ].join(" ");
+                return `<button class="${cls}" onclick="selectChoice(${i})"><span class="letter">${LETTERS[i]}</span><span>${choice}</span></button>`;
+              }).join("")}
+            </div>
+            <div class="explanation ${submitted ? "show" : ""}">
+              <strong>${submitted && selected === q.answer ? "Correct" : "Answer: " + LETTERS[q.answer]}</strong>
+              <p>${q.explanation}</p>
+            </div>
+            <div class="toolbar">
+              <button class="primary" onclick="submitCurrent()" ${selected === undefined || submitted ? "disabled" : ""}>Submit</button>
+              <button onclick="prevQuestion()" ${quiz.index === 0 ? "disabled" : ""}>Back</button>
+              <button onclick="nextQuestion()">${quiz.index === quiz.questions.length - 1 ? "Finish" : "Next"}</button>
+              <button onclick="toggleFlag()">${quiz.flagged[q.id] ? "Unflag" : "Flag"}</button>
+              <button onclick="toggleBookmark('${q.id}')">${state.bookmarks.includes(q.id) ? "Bookmarked" : "Bookmark"}</button>
+            </div>
+          </article>
+          <aside class="quiz-side">
+            <article class="panel">
+              <h3>Timer</h3>
+              <div class="timer" id="timerText">${formatTime(remainingSeconds)}</div>
+              <p id="timerHint">Keep the pace calm and steady.</p>
+            </article>
+            <article class="panel">
+              <h3>Jump</h3>
+              <div class="question-jump">${quiz.questions.map((item, i) => `
+                <button class="jump ${quiz.selected[item.id] !== undefined ? "answered" : ""} ${quiz.index === i ? "current" : ""} ${quiz.flagged[item.id] ? "flagged" : ""}" onclick="jumpQuestion(${i})">${i + 1}</button>`).join("")}</div>
+            </article>
+            <article class="panel">
+              <h3>Notes</h3>
+              <textarea id="scratchNotes" placeholder="Short notes for this session"></textarea>
+            </article>
+          </aside>
+        </div>`;
+    }
+
+    function renderQuestionBody(q) {
+      const listenControls = q.part <= 4 ? `
+        <div class="toolbar">
+          <button class="primary" onclick="speakQuestion('${q.id}')">Play</button>
+          <button onclick="pauseSpeech()">Pause</button>
+          <button onclick="stopSpeech()">Stop</button>
+          <select onchange="setSpeechRate(this.value)" title="Speech rate">
+            <option value="0.82" ${state.speechRate == 0.82 ? "selected" : ""}>Slow</option>
+            <option value="0.92" ${state.speechRate == 0.92 ? "selected" : ""}>Natural</option>
+            <option value="1.05" ${state.speechRate == 1.05 ? "selected" : ""}>Fast</option>
+          </select>
+        </div>
+        <details><summary>Transcript fallback</summary><div class="script-box">${escapeHtml(q.script || "")}</div></details>` : "";
+      return `
+        ${q.visualDescription ? `<div class="visual-box">${q.visualDescription}</div>` : ""}
+        ${q.passage ? `<div class="passage-box">${escapeHtml(q.passage)}</div>` : ""}
+        ${listenControls}
+        <div class="question-text">${escapeHtml(q.prompt)}</div>`;
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+    }
+
+    function selectChoice(i) {
+      const q = quiz.questions[quiz.index];
+      if (quiz.submitted[q.id]) return;
+      quiz.selected[q.id] = i;
+      renderQuiz();
+    }
+
+    function submitCurrent() {
+      const q = quiz.questions[quiz.index];
+      const selected = quiz.selected[q.id];
+      if (selected === undefined) return;
+      quiz.submitted[q.id] = true;
+      state.answers[q.id] = {
+        part: q.part,
+        selected,
+        correctAnswer: q.answer,
+        correct: selected === q.answer,
+        date: new Date().toISOString()
+      };
+      saveState();
+      renderQuiz();
+    }
+
+    function nextQuestion() {
+      if (quiz.index >= quiz.questions.length - 1) return finishQuiz();
+      quiz.index += 1;
+      renderQuiz();
+    }
+
+    function prevQuestion() {
+      if (quiz.index > 0) quiz.index -= 1;
+      renderQuiz();
+    }
+
+    function jumpQuestion(i) {
+      quiz.index = i;
+      renderQuiz();
+    }
+
+    function toggleFlag() {
+      const q = quiz.questions[quiz.index];
+      quiz.flagged[q.id] = !quiz.flagged[q.id];
+      renderQuiz();
+    }
+
+    function toggleBookmark(id) {
+      state.bookmarks = state.bookmarks.includes(id)
+        ? state.bookmarks.filter(x => x !== id)
+        : [...state.bookmarks, id];
+      saveState();
+      renderQuiz();
+    }
+
+    function finishQuiz() {
+      stopTimer();
+      stopSpeech();
+      const total = quiz.questions.length;
+      let correct = 0;
+      quiz.questions.forEach(q => {
+        const selected = quiz.selected[q.id];
+        if (selected === q.answer) correct += 1;
+        if (selected !== undefined) {
+          state.answers[q.id] = {
+            part: q.part,
+            selected,
+            correctAnswer: q.answer,
+            correct: selected === q.answer,
+            date: new Date().toISOString()
+          };
+        }
+      });
+      const percent = Math.round(correct / total * 100);
+      const estimated = estimateToeic(quiz.questions, correct);
+      state.attempts.push({ mode: quiz.title, correct, total, percent, estimated, date: new Date().toISOString() });
+      saveState();
+      setHeader("Result", `${quiz.title} complete`, `<button class="primary" onclick="setView('review')">Review</button><button onclick="setView('dashboard')">Dashboard</button>`);
+      byId("viewRoot").innerHTML = `
+        <div class="grid">
+          <article class="panel span-4 metric"><p>Correct</p><strong>${correct}/${total}</strong><span>${percent}%</span></article>
+          <article class="panel span-4 metric"><p>Estimated TOEIC</p><strong>${estimated}</strong><span>practice estimate</span></article>
+          <article class="panel span-4 metric"><p>Band</p><strong>${estimated >= 900 ? "900+" : estimated >= 800 ? "800+" : estimated >= 700 ? "700+" : "<700"}</strong><span>latest attempt</span></article>
+          <article class="panel span-12"><h3>Part Breakdown</h3>${resultBreakdown(quiz.questions)}</article>
+        </div>`;
+      quiz = null;
+    }
+
+    function resultBreakdown(items) {
+      const parts = Object.keys(PARTS).map(Number);
+      return `<div class="bank-list">${parts.map(p => {
+        const partItems = items.filter(q => q.part === p);
+        if (!partItems.length) return "";
+        const correct = partItems.filter(q => state.answers[q.id]?.correct).length;
+        return `<div class="bank-item"><strong>Part ${p}: ${PARTS[p].name}</strong><span>${correct}/${partItems.length} correct</span></div>`;
+      }).join("")}</div>`;
+    }
+
+    function estimateToeic(items, correct) {
+      const listeningItems = items.filter(q => q.part <= 4);
+      const readingItems = items.filter(q => q.part >= 5);
+      const lCorrect = listeningItems.filter(q => quiz?.selected?.[q.id] === q.answer || state.answers[q.id]?.correct).length;
+      const rCorrect = readingItems.filter(q => quiz?.selected?.[q.id] === q.answer || state.answers[q.id]?.correct).length;
+      const lScore = listeningItems.length ? Math.round((lCorrect / listeningItems.length) * 495) : Math.round((correct / items.length) * 495);
+      const rScore = readingItems.length ? Math.round((rCorrect / readingItems.length) * 495) : Math.round((correct / items.length) * 495);
+      return Math.max(10, Math.min(990, Math.round((lScore + rScore) / 5) * 5));
+    }
+
+    function startTimer() {
+      stopTimer();
+      timerHandle = setInterval(() => {
+        remainingSeconds -= 1;
+        const text = byId("timerText");
+        if (text) text.textContent = formatTime(Math.max(0, remainingSeconds));
+        const hint = byId("timerHint");
+        if (hint && remainingSeconds <= 120) hint.textContent = "Final two minutes.";
+        else if (hint && remainingSeconds <= 600) hint.textContent = "Ten-minute warning.";
+        if (remainingSeconds <= 0) finishQuiz();
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerHandle) clearInterval(timerHandle);
+      timerHandle = null;
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
+
+    function speakQuestion(id) {
+      const q = QUESTIONS.find(item => item.id === id) || quiz?.questions[quiz.index];
+      if (!("speechSynthesis" in window) || !q?.script) return;
+      stopSpeech();
+      const utterance = new SpeechSynthesisUtterance(q.script);
+      utterance.lang = "en-US";
+      utterance.rate = Number(state.speechRate || 0.92);
+      speechSynthesis.speak(utterance);
+    }
+
+    function pauseSpeech() {
+      if ("speechSynthesis" in window) speechSynthesis.pause();
+    }
+
+    function stopSpeech() {
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+    }
+
+    function setSpeechRate(value) {
+      state.speechRate = Number(value);
+      saveState();
+    }
+
+    function exportProgress() {
+      const data = JSON.stringify(state, null, 2);
+      navigator.clipboard?.writeText(data);
+      alert("Progress JSON copied to clipboard if your browser allows it.");
+    }
+
+    window.addEventListener("beforeunload", stopSpeech);
+    render();
+  </script>
+</body>
+</html>
