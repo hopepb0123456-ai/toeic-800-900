@@ -330,12 +330,18 @@
       width: 100%;
       aspect-ratio: 16 / 7;
       min-height: 220px;
+      background: #edf4f1;
     }
 
-    .photo-frame svg {
+    .photo-frame svg,
+    .photo-frame img {
       display: block;
       width: 100%;
       height: 100%;
+    }
+
+    .photo-frame img {
+      object-fit: cover;
     }
 
     .passage-box {
@@ -647,7 +653,7 @@
           id: `P1-${id++}`, part: 1, difficulty: i < 20 ? "Core" : i < 45 ? "Target 800" : "Target 900",
           prompt: "Choose the statement that best describes the scene.",
           visualDescription: `Scene: ${place}. Main detail: a ${person} is ${action}.`,
-          scene: { place, person, action },
+          scene: { place, person, action, image: `assets/part1/${place.replaceAll(" ", "-")}.webp` },
           script: c.choices.join(". "),
           choices: c.choices, answer: c.answer,
           explanation: `The key visual clue is the ${person} actively ${action} in the ${place}.`,
@@ -1169,6 +1175,7 @@
       const place = scene.place || "office";
       const action = scene.action || "reviewing a document";
       const person = scene.person || "employee";
+      const image = scene.image || "";
       const props = {
         "conference room": `<rect x="120" y="245" width="520" height="70" rx="16" fill="#9a6749"/><rect x="165" y="210" width="70" height="55" rx="8" fill="#46656c"/><rect x="500" y="210" width="72" height="55" rx="8" fill="#46656c"/><path d="M128 120h500" stroke="#c8d6d2" stroke-width="8"/><rect x="650" y="120" width="120" height="145" rx="12" fill="#d9e6e1"/>`,
         "warehouse": `<rect x="70" y="208" width="110" height="88" fill="#c9922b"/><rect x="195" y="184" width="126" height="112" fill="#d9aa4d"/><rect x="618" y="174" width="116" height="122" fill="#c9922b"/><path d="M48 130h690M48 170h690" stroke="#b3c3bf" stroke-width="7"/><path d="M80 315h660" stroke="#7e8b88" stroke-width="10"/>`,
@@ -1194,7 +1201,8 @@
                   : `<rect x="340" y="188" width="96" height="58" rx="8" fill="#ffffff" stroke="#70827e" stroke-width="4"/><rect x="372" y="246" width="34" height="20" fill="#70827e"/>`;
       return `<div class="visual-box" role="img" aria-label="${escapeHtml(q.visualDescription)}">
         <div class="photo-frame">
-          <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(q.visualDescription)}" onerror="var fallback=this.nextElementSibling; this.remove(); if (fallback) fallback.classList.remove('hidden')">` : ""}
+          <svg class="${image ? "hidden" : ""}" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <rect width="800" height="360" fill="#edf4f1"/>
             <rect x="28" y="38" width="744" height="285" rx="22" fill="#f8fbf8"/>
             <path d="M28 246h744v77H28z" fill="#d8e5df"/>

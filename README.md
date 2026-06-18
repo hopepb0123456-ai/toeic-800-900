@@ -11,6 +11,7 @@ Single-file TOEIC Listening & Reading practice web app designed for iPad, phones
 - Web Speech API playback for Listening with transcript fallback.
 - Local progress saved in the browser with `localStorage`.
 - Responsive iPad-first layout with large touch targets.
+- Part 1 supports real raster scene images in `assets/part1/*.webp`, with built-in SVG fallback when an asset is missing.
 
 ## Browser Notes
 
@@ -28,3 +29,18 @@ Recommended deployment:
 ## Scope
 
 This is original practice material inspired by the TOEIC Listening & Reading format. It is not an official ETS product and does not include copied official test questions.
+
+## Part 1 Image Assets
+
+For richer Part 1 visuals, add imagegen or other owned/licensed assets with these filenames:
+
+- `assets/part1/conference-room.webp`
+- `assets/part1/warehouse.webp`
+- `assets/part1/hotel-lobby.webp`
+- `assets/part1/train-station.webp`
+- `assets/part1/office-kitchen.webp`
+- `assets/part1/copy-center.webp`
+- `assets/part1/airport-gate.webp`
+- `assets/part1/retail-store.webp`
+
+If any file is missing, the app automatically shows its local SVG fallback instead of a broken image.
